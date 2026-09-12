@@ -4,11 +4,9 @@ export default function Home() {
       <section className="card">
         <div className="logo">🐾 Paw<span>Link</span></div>
         <h1>Si algún día se pierde, ayúdalo a volver a casa.</h1>
-        <p>
-          Identificación inteligente para mascotas con QR y NFC. Sin aplicaciones para quien encuentra a tu mascota.
-        </p>
+        <p>Identificación inteligente para mascotas con QR y NFC. Sin aplicaciones para quien encuentra a tu mascota.</p>
         <div className="actions">
-          <a className="btn primary" href="#proteger">Proteger a mi mascota</a>
+          <a className="btn primary" href="/auth/register">Proteger a mi mascota</a>
           <a className="btn secondary" href="#encontrada">Encontré una mascota</a>
         </div>
         <div className="badges">
@@ -17,6 +15,7 @@ export default function Home() {
           <span className="badge">Avisos de escaneo</span>
           <span className="badge">Sin app para el finder</span>
         </div>
+        <p className="login-link">¿Ya tienes cuenta? <a href="/auth/login">Inicia sesión</a></p>
       </section>
     </main>
   )
