@@ -23,7 +23,10 @@ export default async function DashboardPage() {
     <main className="dashboard-page">
       <header className="dashboard-header">
         <div className="auth-logo">🐾 Paw<span>Link</span></div>
-        <a className="btn secondary" href="/">Inicio</a>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <a className="btn secondary" href="/dashboard/avistamientos">📍 Avistamientos</a>
+          <a className="btn secondary" href="/">Inicio</a>
+        </div>
       </header>
 
       <section className="dashboard-content">
