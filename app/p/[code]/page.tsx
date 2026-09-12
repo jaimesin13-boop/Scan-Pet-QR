@@ -15,19 +15,34 @@ type PetPublic = {
 
 export default async function PetPublicPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ code: string }>
+  searchParams: Promise<{ source?: string }>
 }) {
   const { code } = await params
+  const { source } = await searchParams
   const supabase = await createClient()
+  const publicCode = code.toUpperCase()
 
   const { data, error } = await supabase.rpc('get_pet_by_tag', {
-    p_code: code.toUpperCase(),
+    p_code: publicCode,
   })
 
   if (error || !data || data.length === 0) {
     notFound()
   }
+
+  // Register the visit without exposing private owner information.
+  // QR is the default; NFC can use ?source=nfc later.
+  const scanType = source?.toLowerCase() === 'nfc' ? 'NFC' : 'QR'
+  await supabase.rpc('register_pet_scan', {
+    p_code: publicCode,
+    p_scan_type: scanType,
+    p_latitude: null,
+    p_longitude: null,
+    p_location_consent: false,
+  })
 
   const pet = data[0] as PetPublic
   const isLost = pet.pet_status === 'lost' || Boolean(pet.lost_description)
@@ -112,12 +127,27 @@ export default async function PetPublicPage({
         )}
 
         <div className="actions" style={{ marginTop: 28 }}>
-          <a className="btn primary" href="tel:" aria-label="Contactar al propietario">
+          <a className="btn primary" href="#contacto" aria-label="Contactar al propietario">
             📞 Contactar al propietario
           </a>
           <a className="btn secondary" href="#avistamiento">
             📍 Reportar avistamiento
           </a>
+        </div>
+
+        <div
+          id="contacto"
+          style={{
+            marginTop: 24,
+            padding: 18,
+            borderRadius: 20,
+            background: '#f7f4ff',
+          }}
+        >
+          <h2 style={{ marginTop: 0 }}>Contactar al propietario</h2>
+          <p style={{ marginBottom: 0 }}>
+            El contacto se realizará de forma protegida por PawLink. Esta función se habilitará en el siguiente módulo.
+          </p>
         </div>
 
         <p className="login-link" style={{ marginTop: 24 }}>
