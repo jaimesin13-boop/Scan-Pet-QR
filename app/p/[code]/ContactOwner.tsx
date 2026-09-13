@@ -49,55 +49,55 @@ export default function ContactOwner({ code }: { code: string }) {
   }
 
   return (
-    <div id="contacto" style={{ marginTop: 24, padding: 18, borderRadius: 20, background: '#f7f4ff' }}>
+    <div id="contacto" className="contact-box">
       <button
-        className="btn primary"
+        className="btn primary contact-toggle"
         type="button"
         onClick={() => setOpen((value) => !value)}
-        style={{ width: '100%', cursor: 'pointer' }}
       >
         📞 {open ? 'Cerrar contacto' : 'Contactar al propietario'}
       </button>
 
       {open && (
-        <div style={{ marginTop: 16, textAlign: 'left' }}>
-          <h2 style={{ marginTop: 0 }}>Contactar al propietario</h2>
-          <p>
+        <div className="contact-form">
+          <h2>Contactar al propietario</h2>
+          <p className="contact-description">
             Puedes dejar un mensaje sin conocer los datos personales del propietario. PawLink enviará tu información de forma protegida.
           </p>
 
-          <label>Tu nombre (opcional)</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. María" />
+          <div className="contact-fields">
+            <div className="contact-field">
+              <label htmlFor="contact-name">Tu nombre <span>(opcional)</span></label>
+              <input id="contact-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. María" />
+            </div>
 
-          <label>Teléfono (opcional)</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Ej. 312..." inputMode="tel" />
+            <div className="contact-field">
+              <label htmlFor="contact-phone">Teléfono <span>(opcional)</span></label>
+              <input id="contact-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Ej. 312 123 4567" inputMode="tel" />
+            </div>
 
-          <label>Correo (opcional)</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ej. correo@ejemplo.com" type="email" />
+            <div className="contact-field full">
+              <label htmlFor="contact-email">Correo <span>(opcional)</span></label>
+              <input id="contact-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ej. correo@ejemplo.com" type="email" />
+            </div>
 
-          <label>Mensaje</label>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ej. Encontré a tu mascota y quiero ayudarte a reunirla contigo."
-            rows={5}
-          />
+            <div className="contact-field full">
+              <label htmlFor="contact-message">Mensaje</label>
+              <textarea
+                id="contact-message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Ej. Encontré a tu mascota y quiero ayudarte a reunirla contigo."
+                rows={5}
+              />
+            </div>
 
-          <button
-            className="btn primary"
-            type="button"
-            disabled={sending}
-            onClick={submit}
-            style={{ width: '100%', cursor: sending ? 'wait' : 'pointer', marginTop: 10 }}
-          >
-            {sending ? 'Enviando...' : 'Enviar mensaje'}
-          </button>
+            <button className="btn primary contact-submit" type="button" disabled={sending} onClick={submit}>
+              {sending ? 'Enviando...' : 'Enviar mensaje'}
+            </button>
+          </div>
 
-          {result && (
-            <p style={{ marginBottom: 0, color: success ? '#27643d' : '#9a2f2f', fontWeight: 700 }}>
-              {result}
-            </p>
-          )}
+          {result && <p className={success ? 'contact-result success' : 'contact-result error'}>{result}</p>}
         </div>
       )}
     </div>
