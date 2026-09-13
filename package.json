@@ -1,6 +1,6 @@
 {
   "name": "pawlink",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "engines": {
     "node": "22.x"
@@ -15,7 +15,8 @@
     "react": "19.1.2",
     "react-dom": "19.1.2",
     "@supabase/supabase-js": "2.116.0",
-    "@supabase/ssr": "0.12.7"
+    "@supabase/ssr": "0.12.7",
+    "qrcode.react": "4.2.0"
   },
   "devDependencies": {
     "typescript": "5.9.3",
