@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ReportSighting from './ReportSighting'
+import ContactOwner from './ContactOwner'
 
 type PetPublic = {
   p_code: string
@@ -68,11 +69,7 @@ export default async function PetPublicPage({
         </div>
 
         <ReportSighting code={publicCode} />
-
-        <div id="contacto" style={{ marginTop: 24, padding: 18, borderRadius: 20, background: '#f7f4ff' }}>
-          <h2 style={{ marginTop: 0 }}>Contactar al propietario</h2>
-          <p style={{ marginBottom: 0 }}>El contacto se realizará de forma protegida por PawLink. Esta función se habilitará en el siguiente módulo.</p>
-        </div>
+        <ContactOwner code={publicCode} />
 
         <p className="login-link" style={{ marginTop: 24 }}>Código del medallón: <strong>{pet.p_code}</strong></p>
       </section>
