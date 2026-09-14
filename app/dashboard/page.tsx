@@ -19,8 +19,6 @@ export default async function DashboardPage() {
     .eq('owner_id', user.id)
     .order('created_at', { ascending: false })
 
-  // Use the secure RPC instead of querying pet_tags/tags directly.
-  // This avoids the RLS relationship issue that prevented the QR from appearing.
   const { data: petTags } = await supabase.rpc('get_my_pet_tags')
 
   const tagByPet = new Map<string, string>()
@@ -35,6 +33,7 @@ export default async function DashboardPage() {
       <header className="dashboard-header">
         <div className="auth-logo">🐾 Paw<span>Link</span></div>
         <div style={{ display: 'flex', gap: 10 }}>
+          <a className="btn secondary" href="/dashboard/alertas">🔔 Alertas</a>
           <a className="btn secondary" href="/dashboard/avistamientos">📍 Avistamientos</a>
           <a className="btn secondary" href="/">Inicio</a>
         </div>
