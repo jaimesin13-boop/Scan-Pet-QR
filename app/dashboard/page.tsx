@@ -7,25 +7,13 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('name, email, phone')
-    .eq('id', user.id)
-    .maybeSingle()
-
-  const { data: pets } = await supabase
-    .from('pets')
-    .select('id, name, species, breed, color, photo_url, status')
-    .eq('owner_id', user.id)
-    .order('created_at', { ascending: false })
-
+  const { data: profile } = await supabase.from('profiles').select('name, email, phone').eq('id', user.id).maybeSingle()
+  const { data: pets } = await supabase.from('pets').select('id, name, species, breed, color, photo_url, status').eq('owner_id', user.id).order('created_at', { ascending: false })
   const { data: petTags } = await supabase.rpc('get_my_pet_tags')
 
   const tagByPet = new Map<string, string>()
   for (const link of petTags || []) {
-    if (link.pet_id && link.public_code) {
-      tagByPet.set(link.pet_id, link.public_code)
-    }
+    if (link.pet_id && link.public_code) tagByPet.set(link.pet_id, link.public_code)
   }
 
   return (
@@ -33,6 +21,7 @@ export default async function DashboardPage() {
       <header className="dashboard-header">
         <div className="auth-logo">🐾 Paw<span>Link</span></div>
         <div style={{ display: 'flex', gap: 10 }}>
+          <a className="btn secondary" href="/dashboard/activar">🔖 Activar medallón</a>
           <a className="btn secondary" href="/dashboard/alertas">🔔 Alertas</a>
           <a className="btn secondary" href="/dashboard/avistamientos">📍 Avistamientos</a>
           <a className="btn secondary" href="/">Inicio</a>
@@ -48,6 +37,7 @@ export default async function DashboardPage() {
 
         <div className="dashboard-actions">
           <a className="btn primary" href="/dashboard/pets/new">+ Registrar mascota</a>
+          <a className="btn danger" href="/dashboard/perdida">🚨 Modo Perdido</a>
         </div>
 
         <section className="pets-section">
@@ -59,25 +49,14 @@ export default async function DashboardPage() {
                 return (
                   <article className="pet-card" key={pet.id} style={{ display: 'block' }}>
                     <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-                      {pet.photo_url ? (
-                        <img src={pet.photo_url} alt={pet.name} />
-                      ) : (
-                        <div className="pet-placeholder">🐶</div>
-                      )}
+                      {pet.photo_url ? <img src={pet.photo_url} alt={pet.name} /> : <div className="pet-placeholder">🐶</div>}
                       <div>
                         <h3>{pet.name}</h3>
                         <p>{pet.species}{pet.breed ? ` · ${pet.breed}` : ''}</p>
-                        <span className="status-pill">
-                          {pet.status === 'lost' ? 'En modo perdido' : 'Protegida'}
-                        </span>
+                        <span className="status-pill">{pet.status === 'lost' ? 'En modo perdido' : 'Protegida'}</span>
                       </div>
                     </div>
-
-                    {code ? (
-                      <QRCodeCard code={code} petName={pet.name} />
-                    ) : (
-                      <p style={{ marginTop: 16 }}>🔖 Aún no hay un medallón vinculado a esta mascota.</p>
-                    )}
+                    {code ? <QRCodeCard code={code} petName={pet.name} /> : <p style={{ marginTop: 16 }}>🔖 Aún no hay un medallón vinculado a esta mascota.</p>}
                   </article>
                 )
               })}
