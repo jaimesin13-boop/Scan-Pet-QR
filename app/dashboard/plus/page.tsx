@@ -6,7 +6,8 @@ export default async function PlusPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: subscription } = await supabase.rpc('get_my_subscription').maybeSingle()
+  const { data: subscriptionData } = await supabase.rpc('get_my_subscription').maybeSingle()
+  const subscription = subscriptionData as { status?: string } | null
   const isPlus = subscription?.status === 'active'
 
   return (
