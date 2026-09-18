@@ -66,7 +66,7 @@ export default function ActivatePage() {
           <label>Mascota<select value={petId} onChange={e => setPetId(e.target.value)}><option value="">Seleccionar mascota</option>{pets.map(p => <option key={p.id} value={p.id}>{p.name} · {p.species}{p.breed ? ` · ${p.breed}` : ''}</option>)}</select></label>
           <label>Código del medallón<input value={medallionCode} onChange={e => setMedallionCode(e.target.value)} placeholder="Ej. PL-22E0A4ED" autoCapitalize="characters" /></label>
           <label>Código de activación<input value={activationCode} onChange={e => setActivationCode(e.target.value)} placeholder="Ingresa el código de tu medallón" autoComplete="off" /></label>
-          <div className="alert"><strong>Protección Digital</strong><br />$20 MXN al mes. Mercado Pago se conectará en la siguiente etapa.</div>
+          <div className="alert"><strong>Protección Digital</strong><br />PawLink Free protege las funciones esenciales. PawLink Plus será opcional: $30 MXN al mes o $299 MXN al año.</div>
           <button className="btn primary auth-submit" onClick={activate} disabled={loading}>
             {loading ? 'Activando...' : 'Activar medallón'}
           </button>
