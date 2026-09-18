@@ -10,6 +10,8 @@ export default async function DashboardPage() {
   const { data: profile } = await supabase.from('profiles').select('name, email, phone').eq('id', user.id).maybeSingle()
   const { data: pets } = await supabase.from('pets').select('id, name, species, breed, color, photo_url, status').eq('owner_id', user.id).order('created_at', { ascending: false })
   const { data: petTags } = await supabase.rpc('get_my_pet_tags')
+  const { data: subscription } = await supabase.rpc('get_my_subscription').maybeSingle()
+  const isPlus = subscription?.status === 'active'
 
   const tagByPet = new Map<string, string>()
   for (const link of petTags || []) {
@@ -34,6 +36,20 @@ export default async function DashboardPage() {
           <h1>Hola, {profile?.name || user.user_metadata?.name || 'bienvenido'} 👋</h1>
           <p>Administra tus mascotas y mantén su información protegida.</p>
         </div>
+
+        <section style={{ margin: '0 0 40px', padding: 24, borderRadius: 20, background: isPlus ? '#edf9f0' : '#f7f4ff', border: '1px solid #e4e0ef' }}>
+          <p className="eyebrow" style={{ margin: '0 0 8px' }}>PLAN DE PROTECCIÓN</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+            <div>
+              <h2 style={{ margin: '0 0 6px', fontSize: 28 }}>{isPlus ? 'PawLink Plus ✨' : 'PawLink Free 🐾'}</h2>
+              <p style={{ margin: 0, fontSize: 16 }}>
+                {isPlus ? 'Tienes activadas las funciones avanzadas de PawLink.' : 'Tu mascota está protegida con las funciones esenciales de PawLink.'}
+              </p>
+            </div>
+            {!isPlus && <a className="btn primary" href="/dashboard/plus">Conocer PawLink Plus</a>}
+          </div>
+          {!isPlus && <p style={{ margin: '14px 0 0', fontSize: 14 }}>Plus: $30 MXN/mes o $299 MXN/año. Las funciones esenciales no se bloquean si no tienes Plus.</p>}
+        </section>
 
         <div className="dashboard-actions">
           <a className="btn primary" href="/dashboard/pets/new">+ Registrar mascota</a>
