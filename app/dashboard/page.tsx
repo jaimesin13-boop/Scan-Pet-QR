@@ -10,7 +10,8 @@ export default async function DashboardPage() {
   const { data: profile } = await supabase.from('profiles').select('name, email, phone').eq('id', user.id).maybeSingle()
   const { data: pets } = await supabase.from('pets').select('id, name, species, breed, color, photo_url, status').eq('owner_id', user.id).order('created_at', { ascending: false })
   const { data: petTags } = await supabase.rpc('get_my_pet_tags')
-  const { data: subscription } = await supabase.rpc('get_my_subscription').maybeSingle()
+  const { data: subscriptionData } = await supabase.rpc('get_my_subscription').maybeSingle()
+  const subscription = subscriptionData as { status?: string } | null
   const isPlus = subscription?.status === 'active'
 
   const tagByPet = new Map<string, string>()
